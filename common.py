@@ -2023,7 +2023,6 @@ class ST2CSPC(nn.Module):
 
 ##### end of swin transformer v2 #####
 
-#自适应特征融合
 class Upsample(nn.Module):
     def __init__(self, in_channels, out_channels, scale_factor=2):
         super(Upsample, self).__init__()
@@ -2094,16 +2093,16 @@ class ASFF_3(nn.Module):
     def __init__(self, inter_dim=512, level=0, channel=[512,256,128]):
         super(ASFF_3, self).__init__()
 
-        self.inter_dim = inter_dim #特征通道数，默认512，level表级别，
-        compress_c = 8  #压缩因子，用于减少特征通道数
+        self.inter_dim = inter_dim 
+        compress_c = 8  
 
-        self.weight_level_1 = Conv(self.inter_dim, compress_c, 1, 1) #创建一个成员变量，对特征进行权重调整，输入通道self.inter_dim，输出compress_c
+        self.weight_level_1 = Conv(self.inter_dim, compress_c, 1, 1) 
         self.weight_level_2 = Conv(self.inter_dim, compress_c, 1, 1)
         self.weight_level_3 = Conv(self.inter_dim, compress_c, 1, 1)
 
-        self.weight_levels = nn.Conv2d(compress_c * 3, 3, kernel_size=1, stride=1, padding=0)#创建卷积层对象，用于将不同层级特征图进行加权融合
+        self.weight_levels = nn.Conv2d(compress_c * 3, 3, kernel_size=1, stride=1, padding=0)
 
-        self.conv = Conv(self.inter_dim, self.inter_dim, 3, 1)#对融合后的图进行进一步的处理
+        self.conv = Conv(self.inter_dim, self.inter_dim, 3, 1)
 
         self.level = level
         if self.level == 0:
